@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 
+import Event
+import EventHandler
 from core.GithubHandler import fetchAllEventsOfPublicUser
 
 def countEventTypesFromData(data: list[dict]) -> dict:
@@ -11,12 +13,19 @@ def countEventTypesFromData(data: list[dict]) -> dict:
 
     return eventTypes
 
-
 def printAllEventsOfUsername(username: str):
     eventList = fetchAllEventsOfPublicUser(username)
     print(f"{username}'s events:")
     for eventName, eventTimes in countEventTypesFromData(eventList).items():
         print(f"  - {eventName}: {eventTimes}")
+
+    for event in eventList:
+        eventObject = EventHandler.getEvent(event)
+
+    for _, eventObj in Event.getAllEvents().items():
+        eventObj.showEventDetails()
+
+
 
 
 if __name__ == '__main__':
