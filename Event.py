@@ -49,7 +49,11 @@ class PushEvent(Event):
         return f"{self.actor} has pushed {self.pushes} time(s) to repo named {self.repo}."
 
 class IssuesEvent(Event):
-    actionTypesAndOcurrences: {str : int} = {}
+    actionTypesAndOcurrences: {str : int}
+
+    def __init__(self, actor, repo):
+        super().__init__(actor, repo)
+        self.actionTypesAndOcurrences = {}
 
     def newEventOcurrence(self, issueActionType):
         self.actionTypesAndOcurrences[issueActionType] = self.actionTypesAndOcurrences.get(issueActionType, 0) + 1
