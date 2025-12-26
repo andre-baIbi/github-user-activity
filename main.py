@@ -1,31 +1,18 @@
 from argparse import ArgumentParser
 
-import Event
-import EventHandler
-from core.GithubHandler import fetchAllEventsOfPublicUser
+from core.ActivityUtils import getEventTypeDict, showEventsPerType, showActivityByEventType
+from core.GithubHandler import getEventsOfUserFromGithubApi
 
-def countEventTypesFromData(data: list[dict]) -> dict:
-    eventTypes = {}
 
-    for event in data:
-        type = event["type"]
-        eventTypes[type] = eventTypes.get(type, 0) + 1
+def printActivityUseCase(username: str):
+    #1 : Map events
+    eventList = getEventsOfUserFromGithubApi(username)
 
-    return eventTypes
-
-def printAllEventsOfUsername(username: str):
-    eventList = fetchAllEventsOfPublicUser(username)
+    # 2: Load and show activity
+    eventTypeDict = getEventTypeDict(eventList)
     print(f"{username}'s events:")
-    for eventName, eventTimes in countEventTypesFromData(eventList).items():
-        print(f"  - {eventName}: {eventTimes}")
-
-    for event in eventList:
-        eventObject = EventHandler.getEvent(event)
-
-    for _, eventObj in Event.getAllEvents().items():
-        eventObj.showEventDetails()
-
-
+    showEventsPerType(eventTypeDict)
+    showActivityByEventType(eventTypeDict) #todo me!
 
 
 if __name__ == '__main__':
@@ -35,4 +22,4 @@ if __name__ == '__main__':
 
     usernameFromParams = parser.parse_args().username
 
-    printAllEventsOfUsername(usernameFromParams)
+    printActivityUseCase(usernameFromParams)

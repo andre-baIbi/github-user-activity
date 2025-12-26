@@ -1,9 +1,6 @@
-import Event
-import EventHandler
-from core.GithubHandler import fetchAllEventsOfPublicUser
-from main import printAllEventsOfUsername
+from main import printActivityUseCase
 
 
 def test_print():
     username = "kamranahmedse"
-    printAllEventsOfUsername(username)
+    printActivityUseCase(username)
